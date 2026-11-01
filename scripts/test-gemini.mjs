@@ -19,6 +19,12 @@ try {
   await assert.rejects(run);
   globalThis.fetch=async()=>new Response('Unavailable',{status:503});
   await assert.rejects(run,/cart has not changed/);
+  for (const [status, message] of [[400, /rejected the request/], [401, /API key/], [403, /access is denied/], [404, /model is unavailable/], [429, /quota or rate limit/]]) {
+    globalThis.fetch=async()=>Response.json({error:{message:'PRIVATE PROVIDER DETAIL'}},{status});
+    await assert.rejects(run,error=>message.test(error.message)&&!error.message.includes('PRIVATE PROVIDER DETAIL'));
+  }
+  globalThis.fetch=async()=>Response.json({error:{details:[{reason:'API_KEY_INVALID'}]}},{status:400});
+  await assert.rejects(run,/rejected the API key/);
   assert.deepEqual(cart,[{id:'margherita',qty:2}]);
   console.log('Gemini contract checks passed with mocked responses; no live AI evaluation.');
 } finally { globalThis.fetch=originalFetch; }
