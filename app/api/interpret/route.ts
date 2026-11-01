@@ -3,12 +3,12 @@ import { interpret } from '@/lib/gemini.mjs';
 
 export async function GET() {
   await getSession();
-  return Response.json({ configured: Boolean(process.env.GEMINI_API_KEY) });
+  return Response.json({ configured: Boolean(process.env.GEMINI_API_KEY?.trim()) });
 }
 
 export async function POST(req: Request) {
   await getSession();
-  const key = process.env.GEMINI_API_KEY;
+  const key = process.env.GEMINI_API_KEY?.trim();
   if (!key) return Response.json({ error: 'AI is not connected yet. Use menu controls or guided commands.' }, { status: 503 });
   try {
     const body = await req.json();
