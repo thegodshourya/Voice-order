@@ -27,7 +27,7 @@ This is a public prototype. Each browser has a private random session cookie and
 
 ## Deploy on Render
 
-Create a Blueprint from this repository using `render.yaml`. Set `GEMINI_API_KEY` securely when prompted. The Blueprint selects a paid Starter instance and a persistent disk for SQLite. Review pricing before deploying. `GEMINI_MODEL` defaults to `gemini-2.5-flash`; select an available model for your Google project if needed.
+Create a Blueprint from this repository using `render.yaml`. Set `GEMINI_API_KEY` securely when prompted. The Blueprint selects a paid Starter instance and a persistent disk for SQLite. Review pricing before deploying. `GEMINI_MODEL` defaults to `gemini-3.8-flash`; select an available model for your Google project if needed.
 
 Render runs the production Next.js server and provides HTTPS for microphone permission. Orders persist at `/var/data/orders.sqlite`. Use one service instance with this SQLite configuration. The previous Cloudflare Site is independent and is not updated by this repository deployment; existing D1 orders are not migrated.
 

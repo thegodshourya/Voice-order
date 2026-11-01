@@ -5,7 +5,7 @@ const cart = [{id:'margherita',qty:2}];
 let result = {cart:[{id:'margherita',qty:1}],message:'Updated',clarify:false};
 try {
   globalThis.fetch = async (url, options) => {
-    assert.match(url, /gemini-2.5-flash:generateContent$/);
+    assert.match(url, /gemini-3.8-flash:generateContent$/);
     const request = JSON.parse(options.body);
     assert.equal(request.generationConfig.responseMimeType,'application/json');
     assert.equal(JSON.parse(request.contents[0].parts[0].text).utterance,'Margherita ek kar do');
