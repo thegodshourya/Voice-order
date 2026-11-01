@@ -47,3 +47,4 @@ yarn-error.log*
 # Safe templates contain names only, never credentials.
 !.env.example
 !.dev.vars.example
+/data/

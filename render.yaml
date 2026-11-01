@@ -1,0 +1,21 @@
+services:
+  - type: web
+    name: voice-order
+    runtime: node
+    plan: starter
+    buildCommand: corepack pnpm install --frozen-lockfile && corepack pnpm build
+    startCommand: corepack pnpm start
+    healthCheckPath: /api/interpret
+    envVars:
+      - key: NODE_VERSION
+        value: 24.19.0
+      - key: GEMINI_API_KEY
+        sync: false
+      - key: GEMINI_MODEL
+        value: gemini-2.5-flash
+      - key: DATABASE_PATH
+        value: /var/data/orders.sqlite
+    disk:
+      name: orders
+      mountPath: /var/data
+      sizeGB: 1

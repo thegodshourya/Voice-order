@@ -1,29 +1,47 @@
 # VoiceOrder
 
-Round 2 prototype for Build The AI For YOU. React / Vinext, server-validated carts, Cloudflare D1 kitchen orders, optional Gemini interpretation and browser speech recognition.
+A voice-assisted food-ordering demo: speak in English or Hindi, review the transcript, let Gemini interpret the order, then confirm the cart before sending a kitchen ticket. Hinglish interpretation depends on Gemini and speech recognition quality.
 
-## Current status
+## Run locally
 
-Menu, cart corrections, review/confirmation, server pricing, persistent user-scoped kitchen tickets and fulfilment status are implemented. Speech recognition is browser-dependent and fills a reviewable text box. Without a server-side GEMINI_API_KEY, the app explicitly runs guided commands, not AI interpretation. The AI route is implemented but needs a real service key and live evaluation before it can be claimed as tested. No real payments, POS integration or food fulfilment.
+Use Node 24 and the pinned pnpm version:
 
-## Run
+```sh
+corepack pnpm install --frozen-lockfile
+cp .env.example .env.local
+# Set GEMINI_API_KEY privately in .env.local.
+corepack pnpm dev
+```
 
-Install with the Sites dependency helper or pnpm install. Run pnpm dev. Use pnpm build for production. Set the D1 binding DB and apply the generated drizzle migration through the hosting workflow. Local D1 instructions: build once, then use wrangler d1 execute DB --local --config dist/server/wrangler.json --persist-to .wrangler/state --file drizzle/0000_curly_infant_terrible.sql. Only apply each migration once per database. Orders require the hosted ChatGPT identity headers and are scoped to that identity.
+Without a key, the app uses explicit guided commands. Microphone input uses the browser's SpeechRecognition API and requires permission and HTTPS (or localhost). Chrome is recommended; other browsers may not support speech recognition. Gemini interprets the reviewed text; it does not record audio.
 
-## Check
+## Judge walkthrough
 
-node scripts/test-orders.mjs
+1. Add two Margheritas and one garlic bread.
+2. With Gemini configured, submit “Margherita ek kar do”. In Guided mode, use “set margherita to 1”.
+3. Verify one Margherita + one garlic bread, total ₹248.
+4. Review and explicitly confirm. Open Kitchen in the same browser.
+5. Move the ticket through Preparing, Ready and Completed.
 
-The runnable check covers cart totals, corrections, removal, unavailable/unknown products, invalid quantities and duplicate items. Type checking: pnpm exec tsc --noEmit.
+This is a public prototype. Each browser has a private random session cookie and sees its own tickets; it is not a shared restaurant kitchen or an individual account system. Clearing cookies loses access to that browser's tickets. No payments or actual food fulfilment occur.
 
-## Walkthrough
+## Deploy on Render
 
-Use add 2 margherita, set margherita to 1, then add 1 garlic. Total must be INR 248. Review before confirming. Kitchen should contain one Margherita and one Garlic Bread. Retrying the same confirmation ID must not create a second ticket. Try unavailable Cola and verify rejection. Kitchen status progresses through Queued, Preparing, Ready and Completed.
+Create a Blueprint from this repository using `render.yaml`. Set `GEMINI_API_KEY` securely when prompted. The Blueprint selects a paid Starter instance and a persistent disk for SQLite. Review pricing before deploying. `GEMINI_MODEL` defaults to `gemini-2.5-flash`; select an available model for your Google project if needed.
 
-## AI configuration
+Render runs the production Next.js server and provides HTTPS for microphone permission. Orders persist at `/var/data/orders.sqlite`. Use one service instance with this SQLite configuration. The previous Cloudflare Site is independent and is not updated by this repository deployment; existing D1 orders are not migrated.
 
-Use server-only GEMINI_API_KEY and optional GEMINI_MODEL (default gemini-3.8-flash). Never put the key in a public variable or commit it. Implementation follows Google's Interactions API structured-output documentation: https://ai.google.dev/gemini-api/docs/structured-output . A schema does not guarantee semantic correctness: server code validates every returned item and quantity and owns pricing. Clarifications preserve the original cart. Test Hindi, English, Hinglish, negative requests, ambiguous corrections, background noise and unsupported modifiers before submission.
+## Checks
 
-## Attribution
+```sh
+corepack pnpm test
+corepack pnpm typecheck
+corepack pnpm build
+corepack pnpm start
+# In another terminal, against the running server:
+node scripts/test-api.mjs
+```
 
-Built with AI coding assistance from ChatGPT/Codex. Open-source dependencies are listed in package.json. Gemini is an external model service when configured. Browser speech recognition may use the browser vendor's remote recognition service. Menu prices are illustrative, not a branded restaurant menu. No performance or commercial savings have been measured yet.
+`app/` contains the interface and API routes; `lib/order-engine.mjs` owns the menu, prices and validation; `db/` stores orders; `scripts/` contains checks. See [Gemini setup](docs/GEMINI_SETUP.md).
+
+Built with AI coding assistance. Browser speech services and Gemini are external services. Live Gemini and microphone accuracy must be evaluated with your own key and browser; automated checks do not establish those results.
