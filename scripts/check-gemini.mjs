@@ -9,6 +9,8 @@ if (!key) {
 }
 
 const originalFetch = globalThis.fetch;
+const started = Date.now();
+console.log('Sending one Gemini request; allowing up to 60 seconds for a response...');
 globalThis.fetch = async (...args) => {
   const response = await originalFetch(...args);
   console.log(`Gemini HTTP status: ${response.status}`);
@@ -31,5 +33,6 @@ try {
   console.error(String(error.message).replaceAll(key, '[REDACTED]'));
   process.exitCode = 1;
 } finally {
+  console.log(`Elapsed: ${((Date.now() - started) / 1000).toFixed(1)} seconds`);
   globalThis.fetch = originalFetch;
 }

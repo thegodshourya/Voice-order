@@ -25,6 +25,10 @@ try {
   }
   globalThis.fetch=async()=>Response.json({error:{details:[{reason:'API_KEY_INVALID'}]}},{status:400});
   await assert.rejects(run,/rejected the API key/);
+  globalThis.fetch=async()=>{throw new DOMException('Timed out','TimeoutError');};
+  await assert.rejects(run,/within 60 seconds.*cart has not changed/);
+  globalThis.fetch=async()=>{throw new TypeError('fetch failed');};
+  await assert.rejects(run,/Could not reach Gemini.*cart has not changed/);
   assert.deepEqual(cart,[{id:'margherita',qty:2}]);
   console.log('Gemini contract checks passed with mocked responses; no live AI evaluation.');
 } finally { globalThis.fetch=originalFetch; }
