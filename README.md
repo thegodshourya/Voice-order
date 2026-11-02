@@ -19,11 +19,11 @@ A voice-assisted restaurant ordering prototype built with Next.js, Gemini and SQ
 | **Explore** | Browse pizzas, sides, topping pots and a sample combo offer. |
 | **Speak** | Start the microphone once. Recognized speech submits automatically; typing and menu buttons also work. |
 | **Make it yours** | Ask about offers, change quantities or add extras. Gemini interprets English, Hindi and Hinglish text. |
-| **Review** | Say “done” to open the centered cart dialog. Edit quantities before continuing. |
+| **Review** | After a successful voice order, pause for five seconds or say “review my order” to open the centered cart dialog. New speech delays automatic review. |
 | **Checkout** | Accept or skip an optional dip, choose simulated UPI or card payment, then explicitly confirm. |
 | **Kitchen** | Follow the ticket through Queued, Preparing, Ready and Completed in the same browser. |
 
-The interface includes a Bomb Squad introduction, responsive menu cards, a listening indicator and reduced-motion support.
+The interface includes warm glass menu cards with locally stored illustrative food photos, a voice panel that floats to the center on desktop, animated checkout and reduced-motion support. Photo sources and licenses are in `public/food/credits.html`. On phones the voice panel and menu stack vertically.
 
 ## Demo walkthrough
 
@@ -31,7 +31,7 @@ The interface includes a Bomb Squad introduction, responsive menu cards, a liste
 2. Order **two Margheritas and one garlic bread**.
 3. Say **“Margherita ek kar do”** with Gemini configured.
 4. Check that the cart contains one Margherita and one garlic bread: **₹248**.
-5. Say **“done”**, review the cart, skip the optional dip, and select a demo payment method.
+5. Pause for five seconds to open review automatically, or say **“review my order”**. Say **“skip extras”**, then **“confirm with UPI”** or **“confirm with card”**.
 6. Confirm and open **Kitchen** in the same browser.
 
 **Try an offer:** the Margherita + lemonade combo is ₹199, saving ₹19 compared with separate items. Cheese and pepper topping pots are served on the side. Extras require customer acceptance.
@@ -120,4 +120,4 @@ The API checks cover server-owned prices, explicit confirmation, duplicate prote
 
 Built with AI coding assistance. Gemini and browser speech recognition are external services. Dependency versions are recorded in `package.json` and `pnpm-lock.yaml`.
 
-Voice checkout commands run locally without Gemini: “review my order”, “skip extras”, “confirm with UPI”, and “confirm with card”. Saying only “UPI” or “card” selects a method without submitting. Pause voice at any time. On interpretation failure the cart is preserved and queued speech is cancelled so stale instructions cannot submit an incomplete order. Browser speech support varies; Chrome is recommended. Free Render instances may need time to wake up.
+Voice checkout commands run locally without Gemini: “review my order”, “skip extras”, “confirm with UPI”, and “confirm with card”. Saying only “UPI” or “card” selects a method without submitting. Pause voice at any time. On interpretation failure the cart is preserved and queued speech is cancelled so stale instructions cannot submit an incomplete order. Browser speech support varies; Chrome is recommended. Free Render instances may need time to wake up. HTML proxy error pages now produce a readable retry message instead of a JSON parsing error. A failed request keeps the cart and cancels automatic review; retry once the service is ready.
