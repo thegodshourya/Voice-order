@@ -119,3 +119,5 @@ The API checks cover server-owned prices, explicit confirmation, duplicate prote
 - **Illustrative menu:** no actual restaurant fulfilment or measured commercial claims.
 
 Built with AI coding assistance. Gemini and browser speech recognition are external services. Dependency versions are recorded in `package.json` and `pnpm-lock.yaml`.
+
+Voice checkout commands run locally without Gemini: “review my order”, “skip extras”, “confirm with UPI”, and “confirm with card”. Saying only “UPI” or “card” selects a method without submitting. Pause voice at any time. On interpretation failure the cart is preserved and queued speech is cancelled so stale instructions cannot submit an incomplete order. Browser speech support varies; Chrome is recommended. Free Render instances may need time to wake up.
