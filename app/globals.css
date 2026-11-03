@@ -136,7 +136,7 @@ footer small { font-size:11px; }
 .empty p { font-size:13px; }
 @media(min-width:1101px) {
  .workspace.voice-focused { display:block; min-height:700px; }
- .voice-focused .menu-panel { width:calc(50% - 270px); min-width:250px; }
+ .voice-focused .menu-panel { width:100%; min-width:0; }
  .voice-focused .menu-panel .section-top>span { display:none; }
  .voice-focused .menu-item { grid-template-columns:64px minmax(0,1fr) 28px; gap:12px; }
  .voice-focused .food-photo { width:64px; height:76px; }
@@ -225,7 +225,7 @@ footer small { font-size:11px; }
 .optional-extra span { margin-left:auto; color:var(--muted); font-size:11px; }
 .checkout-items { max-height:30vh; overflow:auto; scrollbar-width:thin; }
 @media(min-width:1101px) {
- .voice-focused .menu-list { grid-template-columns:1fr; gap:0; }
+ .voice-focused .menu-list { grid-template-columns:repeat(2,minmax(0,1fr)); column-gap:calc(min(440px,40vw) + 48px); row-gap:14px; }
  .voice-focused .food-photo { grid-column:auto; }
  .voice-focused .menu-item { padding:18px 0; align-items:center; }
  .voice-focused .menu-item .add { margin:0; width:30px; height:30px; }
@@ -300,15 +300,23 @@ nav button.active { background:#fffcf2e6; color:var(--ink); box-shadow:0 2px 8px
 .welcome { z-index:100; }
 .welcome .primary { background:#ffa64b; color:#2c251d; }
 .welcome .primary:hover { background:#ffb35d; }
-.voice-scrim { position:fixed; inset:0; z-index:25; background:#3c251313; backdrop-filter:blur(2px); animation:arrive .25s; }
 .workspace.voice-focused .conversation { position:fixed; left:50%; top:50%; width:min(510px,calc(100vw - 28px)); max-height:calc(100dvh - 40px); overflow:auto; overscroll-behavior:contain; transform:translate(-50%,-50%); z-index:30; box-shadow:0 32px 90px #4a2a2340,inset 0 1px 0 #fff; animation:voice-float .4s cubic-bezier(.16,1,.3,1); }
 .voice-focused .focus-toggle { display:block; }
 .voice-focused .conversation .voice-orb { width:110px; height:110px; }
 .voice-focused .messages { height:110px; }
 @keyframes glass-listening { 50% { box-shadow:0 0 0 18px #963f220a,inset 0 2px 1px #ffcfa363,0 12px 28px #7e331f30; } }
 @media(min-width:1101px) {
- .voice-focused .menu-panel { min-width:280px; padding:18px; }
- .voice-focused .menu-item { padding:10px; margin-bottom:12px; gap:10px; }
+ .voice-focused .menu-panel { padding:18px; border:0; background:none; backdrop-filter:none; box-shadow:none; }
+ .workspace.voice-focused .conversation { width:min(440px,40vw); top:calc(50% + 44px); max-height:calc(100dvh - 136px); }
+ .voice-focused .menu-panel .section-top,.voice-focused .categories { max-width:calc((100% - min(440px,40vw) - 48px)/2); }
+ .ordering-with-voice .intro { padding:24px 18px 12px; }
+ .ordering-with-voice .intro h1 { font-size:30px; letter-spacing:-.8px; }
+ .ordering-with-voice .intro h1 em { margin-left:.2em; }
+ .ordering-with-voice .intro h1 br { display:none; }
+ .ordering-with-voice .intro .eyebrow { margin-bottom:8px; }
+ .ordering-with-voice .menu-cover { display:none; }
+ .voice-focused .menu-item { padding:14px; margin:0; gap:10px; animation:menu-settle .45s ease-out both; }
+ .voice-focused .menu-item:nth-child(even) { animation-delay:.08s; }
  .voice-focused .food-photo { width:64px; height:76px; margin:0; border-radius:10px; }
 }
 @media(max-width:760px) {
@@ -377,3 +385,10 @@ nav button.active { background:#fffcf2e6; color:var(--ink); box-shadow:0 2px 8px
  .size-card strong { font-size:20px; }
  .size-card small { font-size:9px; }
 }
+
+/* A quiet entrance: readable greetings, visible permission errors, no synthetic audio. */
+.entry-note { max-width:260px; font-size:11px; color:#dfcbb3; margin:16px 0 0; }
+.voice-greeting { color:var(--muted); font:18px/1.45 Georgia,serif; margin:16px 0 0; max-width:310px; }
+.voice-error { font-size:12px; padding:12px; border-left:2px solid var(--accent); background:#f5e3ca; overflow-wrap:anywhere; }
+@keyframes menu-settle { from { opacity:0; transform:translateY(16px); } to { opacity:1; transform:translateY(0); } }
+@media(max-width:1100px) { .ordering-with-voice .workspace::before { content:""; position:fixed; inset:0; z-index:25; background:#3c251326; backdrop-filter:blur(3px); pointer-events:none; } }

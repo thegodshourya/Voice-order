@@ -17,13 +17,13 @@ A voice-assisted restaurant ordering prototype built with Next.js, Gemini and SQ
 | Step | What happens |
 | --- | --- |
 | **Explore** | Browse pizzas, sides, topping pots and a sample combo offer. |
-| **Speak** | Start the microphone once. Speech fragments join after a 1.8-second pause; typing and menu buttons also work. |
+| **Speak** | Choose “Step inside” to start the microphone. Speech fragments join after a 1.8-second pause; typing and menu buttons also work. |
 | **Make it yours** | Ask about offers, change quantities or add extras. Gemini interprets English, Hindi and Hinglish text. |
 | **Review** | After a successful voice order, pause for three seconds or say “review my order” to open the full checkout. New speech delays automatic review. |
 | **Checkout** | Review items, optionally add a dip, and confirm with UPI or card on one screen. Voice confirmation needs no extra screen taps. |
 | **Kitchen** | Follow the ticket through Queued, Preparing, Ready and Completed in the same browser. |
 
-The restored Bomb Squad intro offers “Step inside” and “Start with voice”. The cream and rust menu uses distinct representative food photographs, a visible live transcript, a voice panel that floats to the center on desktop, single-screen checkout and reduced-motion support. Photo sources and licenses are in `public/food/credits.html`. On phones the voice panel starts compact so the menu is visible immediately; starting voice or opening the conversation expands it.
+The Bomb Squad intro’s “Step inside” and “Start with voice” actions both start listening from the user’s click, subject to browser permission. “Browse without microphone” and Escape leave recording off. The cream and rust menu uses distinct representative food photographs, a visible live transcript, a voice panel that floats to the center on desktop, single-screen checkout and reduced-motion support. Photo sources and licenses are in `public/food/credits.html`. After voice entry, the microphone and text greeting appear in front. Desktop menu cards flank the microphone on both sides and remain clickable; phones show a foreground voice panel with a “Back to menu” control. Permission errors appear in the panel, and typing stays available. Animations respect reduced-motion preferences.
 
 ## Demo walkthrough
 
@@ -146,4 +146,4 @@ Demo pizza prices (₹; not restaurant-verified):
 
 Existing Regular items are Small. Existing Medium prices and all old cart IDs retain their meaning. The combo still includes its original regular/small Margherita; it does not inherit large-pizza pricing. Prices are defined in `lib/order-engine.mjs`, never accepted from the browser or AI.
 
-For automatic Gemini → NVIDIA fallback, set `NVIDIA_API_KEY` in Render alongside the Gemini key. The default NVIDIA model is `meta/llama-3.3-70b-instruct`. See [provider setup](docs/GEMINI_SETUP.md) for timeouts, model access and the diagnostic.
+Gemini is the default. NVIDIA is disabled unless `NVIDIA_ENABLED=true`; your saved NVIDIA key can remain in Render. Before enabling fallback, set `NVIDIA_MODEL` to a verified, currently available chat model. The previously suggested model returned HTTP 410 in deployment and is no longer supplied as a default. Parakeet is an ASR model, not a chat-model substitute. See [provider setup](docs/GEMINI_SETUP.md) for timeouts, model access and the diagnostic.

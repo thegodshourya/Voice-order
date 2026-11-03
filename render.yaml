@@ -13,10 +13,12 @@ services:
         sync: false
       - key: GEMINI_MODEL
         value: gemini-3.1-flash-lite
+      - key: NVIDIA_ENABLED
+        value: "false"
       - key: NVIDIA_API_KEY
         sync: false
       - key: NVIDIA_MODEL
-        value: meta/llama-3.3-70b-instruct
+        value: ""
       - key: DATABASE_PATH
         value: /var/data/orders.sqlite
     disk:
