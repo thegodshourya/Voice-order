@@ -108,11 +108,6 @@ footer small { font-size:11px; }
 .checkout-voice p { margin:6px 0; }
 .checkout-voice button { font-size:11px; text-decoration:underline; margin-bottom:6px; }
 .checkout-voice small { display:block; color:var(--muted); }
-.checkout-step { animation:arrive .2s ease-out; }
-.checkout-steps { display:flex; list-style:none; padding:0; margin:0 0 26px; gap:12px; }
-.checkout-steps li { flex:1; display:flex; align-items:center; gap:7px; font-size:11px; border-bottom:2px solid var(--line); padding-bottom:12px; color:var(--muted); }
-.checkout-steps li span { font-size:10px; }
-.checkout-steps li[aria-current] { color:var(--accent); border-color:var(--accent); font-weight:700; }
 .review h2 { font:30px/1.2 Georgia,serif; margin:0 0 12px; }
 .review .eyebrow { font-size:9px; }
 .review>p,.checkout-step>p { font-size:13px; }
@@ -188,3 +183,82 @@ footer small { font-size:11px; }
 @keyframes arrive { from { opacity:0; translate:0 10px; } to { opacity:1; translate:0 0; } }
 @keyframes voice-float { from { opacity:.6; transform:translate(calc(-50% + 80px),-45%); } to { opacity:1; transform:translate(-50%,-50%); } }
 @media(prefers-reduced-motion:reduce) { *,*::before,*::after { animation:none!important; transition:none!important; scroll-behavior:auto!important; } }
+
+/* The original Bomb Squad opening, restored with native dialog focus handling. */
+.welcome { position:fixed; inset:0; margin:0; width:100vw; height:100dvh; max-width:none; max-height:none; padding:28px; border:0; background:radial-gradient(ellipse at 20% 15%,#94502735,transparent 45%),radial-gradient(ellipse at 85% 85%,#c1802930,transparent 50%),#241d17; color:#fff1d6; overflow:auto; }
+.welcome::backdrop { background:#241d17; }
+.welcome-inner { min-height:100%; display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; }
+.welcome .eyebrow { color:#e6ba8d; letter-spacing:4px; }
+.welcome h1 { font:clamp(54px,10vw,120px)/1.1 Georgia,serif; letter-spacing:-5px; margin:8px 0 16px; animation:arrive .8s both; }
+.welcome h1 span { color:#ffa64b; }
+.welcome h1+p { color:#dfcbb3; font-size:14px; margin:0 0 24px; }
+.welcome .primary { width:240px; border-radius:14px; background:#ffa64b; color:#2c251d; box-shadow:0 5px 0 #aa622c; }
+.welcome .back { color:#dfcbb3; width:auto; margin-top:10px; }
+.welcome-voice { display:flex; align-items:center; gap:9px; margin-top:26px; font-size:13px; color:#ffe5bd; }
+.sound-bars { height:60px; display:flex; align-items:center; gap:7px; margin-bottom:20px; }
+.sound-bars span { display:block; width:7px; height:44px; border-radius:9px; background:linear-gradient(#ffcf89,#e88537); animation:equalizer 1.3s ease-in-out infinite; }
+@keyframes equalizer { 0%,100% { transform:scaleY(.3); } 50% { transform:scaleY(1); } }
+
+.intro { padding:30px 0; }
+.intro h1 { font-size:clamp(36px,3.8vw,54px); }
+.menu-cover img { width:300px; height:190px; }
+.menu-list { grid-template-columns:repeat(2,minmax(0,1fr)); gap:28px 24px; padding-top:16px; }
+.menu-item { grid-template-columns:minmax(0,1fr) 40px; gap:12px; padding:0 0 20px; align-items:start; }
+.food-photo { grid-column:1/-1; width:100%; height:176px; border-radius:6px; }
+.menu-item h3 { font-size:17px; }
+.menu-item p { min-height:36px; }
+.menu-item .add { margin-top:22px; width:38px; height:38px; }
+.menu-item b { font-size:15px; color:var(--accent); }
+.conversation { border-top:3px solid var(--accent); border-radius:8px; }
+.conversation .connection-note { margin-bottom:18px; }
+.expand-conversation { display:none; }
+.review fieldset { border:0; margin:0; padding:0; min-width:0; }
+.review-row small { display:block; color:var(--muted); margin-top:5px; }
+.review-row button { width:36px; height:36px; }
+.review .table-label { margin:16px 0 4px; }
+.review .table-label input { padding:8px 10px; }
+.review .total { margin-top:14px; padding:16px 0 0; }
+.review .payment-options { margin:18px 0; }
+.review .checkout-voice { margin:18px 0 8px; padding:10px 12px; }
+.checkout-voice button { float:right; margin-left:12px; }
+.optional-extra { display:flex; align-items:center; gap:8px; width:100%; padding:15px 0 0; font-size:12px; color:var(--accent); text-align:left; }
+.optional-extra span { margin-left:auto; color:var(--muted); font-size:11px; }
+.checkout-items { max-height:30vh; overflow:auto; scrollbar-width:thin; }
+@media(min-width:1101px) {
+ .voice-focused .menu-list { grid-template-columns:1fr; gap:0; }
+ .voice-focused .food-photo { grid-column:auto; }
+ .voice-focused .menu-item { padding:18px 0; align-items:center; }
+ .voice-focused .menu-item .add { margin:0; width:30px; height:30px; }
+}
+@media(max-width:1100px) and (min-width:761px) {
+ .workspace { grid-template-columns:minmax(0,1fr) 310px; gap:24px; }
+ .menu-list { grid-template-columns:1fr; }
+ .food-photo { height:180px; }
+ .menu-cover img { width:230px; }
+}
+@media(max-width:760px) {
+ .intro { padding:24px 0; }
+ .intro h1 { font-size:36px; margin-bottom:12px; }
+ .intro h1 br { display:none; }
+ .intro h1 em { margin-left:8px; }
+ .intro .eyebrow { display:none; }
+ .conversation:not(.is-expanded) { position:relative; padding:16px; }
+ .conversation:not(.is-expanded) .section-top { display:block; padding-right:64px; }
+ .conversation:not(.is-expanded) .section-top h2 { font-size:23px; }
+ .conversation:not(.is-expanded) .mode { margin-top:5px; }
+ .conversation:not(.is-expanded) .voice-orb { position:absolute; top:16px; right:16px; margin:0; width:54px; height:54px; }
+ .conversation:not(.is-expanded) .voice-state { display:none; }
+ .conversation:not(.is-expanded) .voice-state+.fine { text-align:left; margin:12px 0 6px; font-size:12px; max-width:260px; }
+ .conversation:not(.is-expanded) .conversation-body { display:none; }
+ .expand-conversation { display:block; padding:8px 0 0; color:var(--accent); font-size:11px; text-decoration:underline; text-underline-offset:3px; }
+ .conversation.is-expanded .expand-conversation { margin-bottom:12px; }
+ .workspace { gap:28px; }
+ .menu-list { grid-template-columns:1fr; gap:0; padding-top:0; }
+ .menu-item { grid-template-columns:96px minmax(0,1fr) 34px; gap:12px; padding:18px 0; align-items:center; }
+ .food-photo { grid-column:auto; width:96px; height:110px; }
+ .menu-item p { min-height:0; font-size:11px; }
+ .menu-item .add { margin:0; width:34px; height:34px; }
+ .menu-item h3 { font-size:15px; }
+ .welcome h1 { letter-spacing:-3px; }
+}
+@media(prefers-reduced-motion:reduce) { .sound-bars span,.welcome h1 { animation:none; } }

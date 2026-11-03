@@ -10,3 +10,5 @@ Illustrative category photographs from Unsplash, used under the [Unsplash Licens
 - cheese: https://images.unsplash.com/photo-1486297678162-eb2a19b0a32d
 
 Additional photographs and required attribution are listed in [credits.html](credits.html).
+
+Distinct menu photographs and licenses are listed in credits.html. Farmhouse uses the Unsplash pizza photograph above; other new pizza, garlic bread and wedge images come from Wikimedia Commons. All images are representative, not exact restaurant products.

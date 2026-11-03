@@ -19,11 +19,11 @@ A voice-assisted restaurant ordering prototype built with Next.js, Gemini and SQ
 | **Explore** | Browse pizzas, sides, topping pots and a sample combo offer. |
 | **Speak** | Start the microphone once. Speech fragments join after a 1.8-second pause; typing and menu buttons also work. |
 | **Make it yours** | Ask about offers, change quantities or add extras. Gemini interprets English, Hindi and Hinglish text. |
-| **Review** | After a successful voice order, pause for five seconds or say “review my order” to open the centered cart dialog. New speech delays automatic review. |
-| **Checkout** | Accept or skip an optional dip, choose simulated UPI or card payment, then explicitly confirm. |
+| **Review** | After a successful voice order, pause for three seconds or say “review my order” to open the full checkout. New speech delays automatic review. |
+| **Checkout** | Review items, optionally add a dip, and confirm with UPI or card on one screen. Voice confirmation needs no extra screen taps. |
 | **Kitchen** | Follow the ticket through Queued, Preparing, Ready and Completed in the same browser. |
 
-The interface uses a cream and rust restaurant menu, compact photo rows, a visible live transcript, a voice panel that floats to the center on desktop, animated checkout and reduced-motion support. Photo sources and licenses are in `public/food/credits.html`. On phones the voice panel and menu stack vertically.
+The restored Bomb Squad intro offers “Step inside” and “Start with voice”. The cream and rust menu uses distinct representative food photographs, a visible live transcript, a voice panel that floats to the center on desktop, single-screen checkout and reduced-motion support. Photo sources and licenses are in `public/food/credits.html`. On phones the voice panel starts compact so the menu is visible immediately; starting voice or opening the conversation expands it.
 
 ## Demo walkthrough
 
@@ -31,8 +31,8 @@ The interface uses a cream and rust restaurant menu, compact photo rows, a visib
 2. Order **two Margheritas and one garlic bread**.
 3. Say **“Margherita ek kar do”** with Gemini configured.
 4. Check that the cart contains one Margherita and one garlic bread: **₹248**.
-5. Pause for five seconds to open review automatically, or say **“review my order”**. Say **“skip extras”**, then **“confirm with UPI”** or **“confirm with card”**.
-6. Confirm and open **Kitchen** in the same browser.
+5. Pause for three seconds to open review automatically, or say **“review my order”**. Say **“skip extras”**, then **“confirm with UPI”** or **“confirm with card”**.
+6. After spoken confirmation, open **Kitchen** in the same browser to see the ticket.
 
 **Try an offer:** the Margherita + lemonade combo is ₹199, saving ₹19 compared with separate items. Cheese and pepper topping pots are served on the side. Extras require customer acceptance.
 
@@ -123,3 +123,5 @@ Built with AI coding assistance. Gemini and browser speech recognition are exter
 Voice checkout commands run locally without Gemini: “review my order”, “skip extras”, “confirm with UPI”, and “confirm with card”. Saying only “UPI” or “card” selects a method without submitting. Pause voice at any time. On interpretation failure the cart is preserved and queued speech is cancelled so stale instructions cannot submit an incomplete order. Browser speech support varies; Chrome is recommended. Free Render instances may need time to wake up. HTML proxy error pages now produce a readable retry message instead of a JSON parsing error. A failed request keeps the cart and cancels automatic review; retry once the service is ready.
 
 Speech recognition shows interim words live and waits for finalized text before submission. A quantity fragment such as “one” prompts a repeat instead of changing the cart. Recognition restarts retain pending finalized fragments; pause, failures and completed checkout cancel pending speech. Optional menu phrase hints are used only in browsers that support them. This does not add audio denoising: microphone placement, ambient noise, browser recognition and the selected speech language still affect accuracy. Transient Gemini HTTP 502/503/504 errors are retried once within the existing timeout; quota and authentication failures are not retried.
+
+Browser validation covers the restored intro and focus handling, split speech, repeated recognition endings, automatic full checkout, local UPI/card confirmation, cart preservation after malformed or HTML responses, responsive widths, and reduced motion. These simulated speech checks do not establish real microphone accuracy or live Gemini availability.

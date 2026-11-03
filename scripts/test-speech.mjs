@@ -18,5 +18,6 @@ try {
  buffer.startSession();buffer.speechStart();buffer.result(event(['one farmhouse']));mock.timers.tick(10000);assert.equal(sent.length,2);buffer.speechEnd();mock.timers.tick(1800);assert.equal(sent.length,3);
  buffer.startSession();buffer.result(event(["don't"]));buffer.result(event(["don't"],['confirm with card']));mock.timers.tick(1800);assert.equal(sent.at(-1),"don't confirm with card");
  buffer.startSession();buffer.result(event(['one pizza']));buffer.cancel();mock.timers.tick(1800);assert.equal(sent.length,4);
+ buffer.startSession();buffer.result(event(['one farmhouse']));mock.timers.tick(1000);buffer.speechEnd();mock.timers.tick(500);buffer.speechEnd();mock.timers.tick(300);assert.equal(sent.length,5,'repeated end events must not postpone submission');
  console.log('Speech buffer checks passed: split phrases, live interim preview, restarts, deduplication, incomplete quantities, no interim confirmation, speech pauses and cancellation.');
 } finally {mock.timers.reset();}
