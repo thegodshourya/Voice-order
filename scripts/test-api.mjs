@@ -1,5 +1,11 @@
 import assert from 'node:assert/strict';
 const base = process.env.TEST_BASE_URL || 'http://localhost:3000';
+// The welcome screen must exist and be visible in the initial HTML, before hydration.
+const home = await fetch(base);
+assert.equal(home.status,200);
+const html = await home.text();
+const welcome = html.match(/<dialog[^>]*class="welcome"[^>]*>/)?.[0];
+assert.ok(welcome && /\sopen(?:=|\s|>)/.test(welcome),'Intro must be open in server-rendered HTML');
 let cookie;
 async function call(path, method='GET', body, status=200) {
   const r = await fetch(base+path,{method,headers:{'content-type':'application/json',...(cookie?{cookie}:{})},body:body?JSON.stringify(body):undefined});
