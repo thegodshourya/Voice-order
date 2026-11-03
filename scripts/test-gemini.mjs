@@ -17,6 +17,11 @@ try {
   assert.deepEqual((await run()).cart,cart);
   result={cart:[{id:'cola',qty:1}],message:'Bad item',clarify:false};
   await assert.rejects(run);
+  let attempts=0;
+  globalThis.fetch=async()=>++attempts===1?new Response('Busy',{status:503}):Response.json({candidates:[{content:{parts:[{text:JSON.stringify({cart,message:'Recovered',clarify:false})}]}}]});
+  assert.deepEqual((await run()).cart,cart);assert.equal(attempts,2);
+  attempts=0;globalThis.fetch=async()=>{attempts++;return Response.json({error:{}},{status:429});};
+  await assert.rejects(run,/quota/);assert.equal(attempts,1,'quota errors must not retry');
   globalThis.fetch=async()=>new Response('Unavailable',{status:503});
   await assert.rejects(run,/cart has not changed/);
   for (const [status, message] of [[400, /rejected the request/], [401, /API key/], [403, /access is denied/], [404, /model is unavailable/], [429, /quota or rate limit/]]) {
