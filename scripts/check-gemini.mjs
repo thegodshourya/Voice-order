@@ -27,7 +27,7 @@ globalThis.fetch = async (...args) => {
 };
 
 try {
-  const result = await interpret('Add one Margherita', [], key, process.env.GEMINI_MODEL);
+  const result = await interpret('Add one small Margherita', [], key, process.env.GEMINI_MODEL);
   console.log('Gemini returned a valid order response:', JSON.stringify(result));
 } catch (error) {
   console.error(String(error.message).replaceAll(key, '[REDACTED]'));

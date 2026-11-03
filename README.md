@@ -28,7 +28,7 @@ The restored Bomb Squad intro offers “Step inside” and “Start with voice�
 ## Demo walkthrough
 
 1. Open the app in Chrome, choose the speech language that matches your accent, and allow microphone access.
-2. Order **two Margheritas and one garlic bread**.
+2. Order **two small Margheritas and one garlic bread**.
 3. Say **“Margherita ek kar do”** with Gemini configured.
 4. Check that the cart contains one Margherita and one garlic bread: **₹248**.
 5. Pause for three seconds to open review automatically, or say **“review my order”**. Say **“skip extras”**, then **“confirm with UPI”** or **“confirm with card”**.
@@ -96,7 +96,7 @@ For one live Gemini diagnostic using your private configuration:
 node --env-file=.env.local scripts/check-gemini.mjs
 ```
 
-The API checks cover server-owned prices, explicit confirmation, duplicate protection, kitchen updates and browser isolation. They leave a Completed test ticket. Gemini unit checks use mocked responses; live interpretation and microphone accuracy require testing with your own key and browser.
+The API checks cover server-owned prices, explicit confirmation, duplicate protection, kitchen updates and browser isolation. They leave Completed test tickets. Gemini unit checks use mocked responses; live interpretation and microphone accuracy require testing with your own key and browser.
 
 ## Project map
 
@@ -115,15 +115,35 @@ The API checks cover server-owned prices, explicit confirmation, duplicate prote
 - **No real payments:** UPI and card checkout are simulations. No payment details are collected.
 - **Browser-scoped orders:** each browser has a random private session cookie. Clearing cookies loses access to its tickets; this is not a shared restaurant kitchen or account system.
 - **Speech support varies:** recognition requires a supporting browser, permission and HTTPS or localhost. The browser produces text; Gemini receives the submitted transcript and cart, not microphone audio.
-- **Connection status is explicit:** a detected key is not a verified connection. The app displays “Gemini connected” after a successful interpretation.
+- **Connection status is explicit:** a detected key is not a verified connection. The app displays “Connected” after a successful interpretation and marks an active fallback as “Connected · backup”.
 - **Illustrative menu:** no actual restaurant fulfilment or measured commercial claims.
 
 Built with AI coding assistance. Gemini and browser speech recognition are external services. Dependency versions are recorded in `package.json` and `pnpm-lock.yaml`.
 
 Voice checkout commands run locally without Gemini: “review my order”, “skip extras”, “confirm with UPI”, and “confirm with card”. Saying only “UPI” or “card” selects a method without submitting. Pause voice at any time. On interpretation failure the cart is preserved and queued speech is cancelled so stale instructions cannot submit an incomplete order. Browser speech support varies; Chrome is recommended. Free Render instances may need time to wake up. HTML proxy error pages now produce a readable retry message instead of a JSON parsing error. A failed request keeps the cart and cancels automatic review; retry once the service is ready.
 
-Speech recognition shows interim words live and waits for finalized text before submission. A quantity fragment such as “one” prompts a repeat instead of changing the cart. Recognition restarts retain pending finalized fragments; pause, failures and completed checkout cancel pending speech. Optional menu phrase hints are used only in browsers that support them. This does not add audio denoising: microphone placement, ambient noise, browser recognition and the selected speech language still affect accuracy. Transient Gemini HTTP 502/503/504 errors are retried once within the existing timeout; quota and authentication failures are not retried.
+Speech recognition shows interim words live and waits for finalized text before submission. A quantity fragment such as “one” prompts a repeat instead of changing the cart. Recognition restarts retain pending finalized fragments; pause, failures and completed checkout cancel pending speech. Optional menu phrase hints are used only in browsers that support them. This does not add audio denoising: microphone placement, ambient noise, browser recognition and the selected speech language still affect accuracy. With only Gemini configured, transient HTTP 502/503/504 errors are retried once within the existing timeout. With both keys, transient and quota failures trigger NVIDIA fallback; see the provider setup below.
 
 Browser validation covers the restored intro and focus handling, split speech, repeated recognition endings, automatic full checkout, local UPI/card confirmation, cart preservation after malformed or HTML responses, responsive widths, and reduced motion. These simulated speech checks do not establish real microphone accuracy or live Gemini availability.
 
 The liquid-glass menu and checkout retain the cream/rust palette. Starting the microphone brings its panel to the foreground on phones, tablets and desktops; “Back to menu” docks it without stopping recognition. The Bomb Squad intro is visible in the initial HTML and can be reopened with “Replay intro”. The HTTP regression check verifies the initial intro markup.
+
+## Sizes and checkout conversation
+
+Say “pizza” to see the glass size selector, initially showing Margherita with its name and prices. Say another flavour to change it, then “small”, “medium” or “large” (or tap a size). Say “cancel selection” to leave the cart unchanged. Specific requests like “two large farmhouse” add that variant directly. Simple size selection works locally, including during checkout. Complex multi-item orders and corrections go to the configured AI; unclear size requests ask for clarification.
+
+Checkout keeps the microphone running and displays the conversation beside the order on desktop, below it on phones. Add more food by speaking or typing there. A pending size choice must be resolved or cancelled before confirmation. Payments remain simulated and require explicit confirmation.
+
+Demo pizza prices (₹; not restaurant-verified):
+
+| Pizza | Small | Medium | Large |
+| --- | ---: | ---: | ---: |
+| Margherita | 149 | 249 | 349 |
+| Farmhouse | 199 | 269 | 399 |
+| Corn & Cheese | 189 | 279 | 379 |
+| Paneer Tikka | 219 | 299 | 419 |
+| Pepper | 179 | 269 | 369 |
+
+Existing Regular items are Small. Existing Medium prices and all old cart IDs retain their meaning. The combo still includes its original regular/small Margherita; it does not inherit large-pizza pricing. Prices are defined in `lib/order-engine.mjs`, never accepted from the browser or AI.
+
+For automatic Gemini → NVIDIA fallback, set `NVIDIA_API_KEY` in Render alongside the Gemini key. The default NVIDIA model is `meta/llama-3.3-70b-instruct`. See [provider setup](docs/GEMINI_SETUP.md) for timeouts, model access and the diagnostic.

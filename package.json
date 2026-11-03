@@ -9,7 +9,7 @@
     "dev": "next dev --hostname 0.0.0.0",
     "build": "next build --webpack",
     "start": "next start --hostname 0.0.0.0",
-    "test": "node scripts/test-orders.mjs && node scripts/test-gemini.mjs && node scripts/test-voice.mjs && node scripts/test-http.mjs && node scripts/test-speech.mjs",
+    "test": "node scripts/test-orders.mjs && node scripts/test-gemini.mjs && node scripts/test-voice.mjs && node scripts/test-http.mjs && node scripts/test-speech.mjs && node scripts/test-fallback.mjs && node scripts/test-pizza-choice.mjs",
     "typecheck": "tsc --noEmit",
     "lint": "eslint app db lib"
   },
