@@ -19,5 +19,8 @@ try {
  buffer.startSession();buffer.result(event(["don't"]));buffer.result(event(["don't"],['confirm with card']));mock.timers.tick(1800);assert.equal(sent.at(-1),"don't confirm with card");
  buffer.startSession();buffer.result(event(['one pizza']));buffer.cancel();mock.timers.tick(1800);assert.equal(sent.length,4);
  buffer.startSession();buffer.result(event(['one farmhouse']));mock.timers.tick(1000);buffer.speechEnd();mock.timers.tick(500);buffer.speechEnd();mock.timers.tick(300);assert.equal(sent.length,5,'repeated end events must not postpone submission');
+ buffer.startSession();buffer.result(event(['confirm',false]));assert.equal(sent.length,5);buffer.result(event(['confirm']));assert.equal(sent.length,6,'final confirmation must not wait for timer');assert.equal(sent.at(-1),'confirm');mock.timers.tick(1800);assert.equal(sent.length,6);
+ buffer.result(event(['confirm']));assert.equal(sent.length,6,'repeated final confirmation is deduplicated');
+ buffer.startSession();buffer.result(event(['one pizza'],['confirm']));assert.equal(sent.length,6,'never confirm while another phrase is pending');buffer.cancel();
  console.log('Speech buffer checks passed: split phrases, live interim preview, restarts, deduplication, incomplete quantities, no interim confirmation, speech pauses and cancellation.');
 } finally {mock.timers.reset();}

@@ -15,6 +15,9 @@ try {
   assert.equal((await run()).cart[0].qty,1);
   result={cart:[],message:'Which item?',clarify:true};
   assert.deepEqual((await run()).cart,cart);
+  result={cart:[...cart,{id:'garlic',qty:1}],message:'Choose a Farmhouse size.',clarify:true,sizeRequests:[{productId:'farmhouse',qty:1,replaceId:null}]};
+  const sized=await run();assert.deepEqual(sized.cart,cart);assert.deepEqual(sized.draftCart,result.cart);assert.equal(sized.sizeRequests[0].productId,'farmhouse');
+  result={...result,sizeRequests:[{productId:'garlic',qty:1,replaceId:null}]};await assert.rejects(run);
   result={cart:[{id:'cola',qty:1}],message:'Bad item',clarify:false};
   await assert.rejects(run);
   let attempts=0;
