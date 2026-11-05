@@ -22,5 +22,6 @@ try {
  buffer.startSession();buffer.result(event(['confirm',false]));assert.equal(sent.length,5);buffer.result(event(['confirm']));assert.equal(sent.length,6,'final confirmation must not wait for timer');assert.equal(sent.at(-1),'confirm');mock.timers.tick(1800);assert.equal(sent.length,6);
  buffer.result(event(['confirm']));assert.equal(sent.length,6,'repeated final confirmation is deduplicated');
  buffer.startSession();buffer.result(event(['one pizza'],['confirm']));assert.equal(sent.length,6,'never confirm while another phrase is pending');buffer.cancel();
+ buffer.startSession();buffer.speechStart();buffer.result(event(['confirm',false]));buffer.cancel();buffer.startSession();buffer.result(event(['farmhouse']));mock.timers.tick(1800);assert.equal(sent.at(-1),'farmhouse','cancel must clear interrupted speech state and confirmation fragments');
  console.log('Speech buffer checks passed: split phrases, live interim preview, restarts, deduplication, incomplete quantities, no interim confirmation, speech pauses and cancellation.');
 } finally {mock.timers.reset();}
